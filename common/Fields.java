@@ -19,12 +19,12 @@ public class Fields extends Player{
         showSquare();
     }
 
-    public static void addPostition(int i, int j) {
-
+    public static void addPosition(int i, int j, Symbol symbol) {
+        square[i][j] = symbol.toString();
     }
 
     public static void killPosition(int i, int j) {
-
+        square[i][j] = " ";
     }
 
     protected static void showSquare() {

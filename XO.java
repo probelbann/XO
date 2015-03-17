@@ -6,7 +6,10 @@ public class XO extends GameRealization{
 
     public static void main(String[] args) {
 
-        new GameRealization().startGame();
+        GameRealization game = new GameRealization();
+        game.startGame();
+        game.showHistoryMovies(GameRealization.historyOfGame);
+
     }
     /*Выйгрышные комбинации
     00 01 02
