@@ -7,7 +7,7 @@ public class XO extends GameRealization{
     public static void main(String[] args) {
 
         GameRealization game = new GameRealization();
-        game.startGame();
+        game.initGame();
         game.showHistoryMovies(GameRealization.historyOfGame);
 
     }

@@ -28,7 +28,16 @@ public class GameRealization extends Fields {
         WIN_VALUE.add("20 11 02");
     }
 
-    private void initGame() {
+    public void initGame() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Выберите режим игры Person vs Person(PVP), Person vs CPU(PVC)");
+        String gameMode = scanner.next();
+        if(gameMode.equals("PVP")) {
+            gamePVP();
+        } else gameCPU();
+    }
+
+    private void gamePVP() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите имя первого и второго игрока: ");
         String playerName1 = scanner.next();
@@ -39,10 +48,62 @@ public class GameRealization extends Fields {
 
         System.out.println("Имя первого игрока: "+player1.getName()+" и он обозначается "+player1.getSymbol());
         System.out.println("Имя второго игрока: "+player2.getName()+" и он обозначается "+player2.getSymbol());
+        startGamePVP();
     }
 
-    public void startGame() {
-        initGame();
+    private void gameCPU() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите имя игрока: ");
+        String playerName1 = scanner.next();
+
+        player1 = new Player(playerName1, Symbol.X);
+        player2 = new CPU("CPU", Symbol.O);
+
+        System.out.println("Имя первого игрока: "+player1.getName()+" и он обозначается "+player1.getSymbol());
+        System.out.println("Имя CPU: "+player2.getName()+" и он обозначается "+player2.getSymbol());
+        startGameCPU();
+    }
+
+    private void startGamePVP() {
+        int countMoves = 1;
+        int i = 1;
+
+        for (; i < 10; i++) {
+            if (i%2 == 1) {
+                System.out.println("Ход # " + countMoves);
+                if (setPosition(player1)) {
+                    showSquare();
+                    if (countMoves >= 3) {
+                        if (showWinner(player1, player2, countMoves)) {
+                            break;
+                        }
+                    }
+                    countMoves++;
+                } else {
+                        countMoves--;
+                        showSquare();
+                }
+            } else {
+                System.out.println("Ход # " + countMoves);
+                if (setPosition(player2)) {
+                    showSquare();
+                    if (countMoves >= 3) {
+                        if (showWinner(player1, player2, countMoves)) {
+                            break;
+                        }
+                    }
+                    countMoves++;
+                } else {
+                    if(countMoves > 0) {
+                        countMoves--;
+                        showSquare();
+                    }
+                }
+            }
+        }
+    }
+
+    private void startGameCPU() {
         int countMoves = 1;
         int i = 1;
 
@@ -65,19 +126,37 @@ public class GameRealization extends Fields {
                 }
             } else {
                 System.out.println("Ход # " + countMoves);
-                if (setPosition(player2)) {
-                    showSquare();
-                    if (countMoves >= 3) {
-                        if (showWinner(player1, player2, countMoves)) {
-                            break;
-                        }
+                System.out.println("CPU делает ход: ");
+                CPUSetPosition();
+                showSquare();
+                if (countMoves >= 3) {
+                    if (showWinner(player1, player2, countMoves)) {
+                        break;
                     }
-                    countMoves++;
-                } else {
-                    if(countMoves > 0) {
-                        countMoves--;
-                        showSquare();
-                    }
+                }
+                countMoves++;
+            }
+        }
+    }
+
+    private void CPUSetPosition() {
+        boolean iCantMove = true;
+        int i =(int) (Math.random()*3);
+        int j =(int) (Math.random()*3);
+
+        System.out.println("первое значение: "+i+" второе значение: "+j);
+        if (square[i][j].equals(" ")) {
+            Fields.addPosition(i, j, player2.getSymbol());
+            addPositionToHistory(i, j, player2);
+        } else {
+            while (iCantMove) {
+                System.out.println(player2.getName() + " делает неверный ход: iCantMove");
+                i =(int) (Math.random()*3);
+                j =(int) (Math.random()*3);
+                if (square[i][j].equals(" ")) {
+                    Fields.addPosition(i, j, player2.getSymbol());
+                    addPositionToHistory(i, j, player2);
+                    iCantMove = false;
                 }
             }
         }
@@ -125,13 +204,13 @@ public class GameRealization extends Fields {
             backValue = scanner.nextLine();
             int lastElement = historyOfGame.size()-1;
             if (backValue.equals("back")) {
-                String value = historyOfGame.get(lastElement);
-                int value1 = Integer.parseInt(value)/10;
-                int value2 = Integer.parseInt(value)%10;
-                Fields.killPosition(value1, value2);
+                killLastElement(lastElement);
+                if (player2.getName().equals("CPU")) {
+                    killLastElement(lastElement);
+                }
                 historyOfGame.remove(lastElement);
                 valueOfMethod = false;
-                }
+            }
 
         } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("ArrayIndexOutOfBoundsException");
@@ -141,6 +220,13 @@ public class GameRealization extends Fields {
             this.makeMove = false;
         } else { this.makeMove = true; }
         return valueOfMethod;
+    }
+
+    private void killLastElement(int lastElement) {
+        String value = historyOfGame.get(lastElement);
+        int value1 = Integer.parseInt(value)/10;
+        int value2 = Integer.parseInt(value)%10;
+        Fields.killPosition(value1, value2);
     }
 
     private void addPositionToHistory(int i, int j, Player player) {
