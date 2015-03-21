@@ -16,6 +16,8 @@ public class GameRealization extends Fields {
     private boolean makeMove;
     private Player player1;
     private Player player2;
+    public Scanner scanner = new Scanner(System.in);
+    public boolean valueOfMethod = true;
 
     static {
         WIN_VALUE.add("00 01 02");
@@ -29,7 +31,6 @@ public class GameRealization extends Fields {
     }
 
     public void initGame() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Выберите режим игры Person vs Person(PVP), Person vs CPU(PVC)");
         String gameMode = scanner.next();
         if(gameMode.equals("PVP")) {
@@ -38,7 +39,6 @@ public class GameRealization extends Fields {
     }
 
     private void gamePVP() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Введите имя первого и второго игрока: ");
         String playerName1 = scanner.next();
         String playerName2 = scanner.next();
@@ -46,21 +46,20 @@ public class GameRealization extends Fields {
         player1 = new Player(playerName1, Symbol.X);
         player2 = new Player(playerName2, Symbol.O);
 
-        System.out.println("Имя первого игрока: "+player1.getName()+" и он обозначается "+player1.getSymbol());
-        System.out.println("Имя второго игрока: "+player2.getName()+" и он обозначается "+player2.getSymbol());
+        System.out.println("Имя первого игрока: " + player1.getName() + " и он обозначается " + player1.getSymbol());
+        System.out.println("Имя второго игрока: " + player2.getName() + " и он обозначается " + player2.getSymbol());
         startGamePVP();
     }
 
     private void gameCPU() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Введите имя игрока: ");
         String playerName1 = scanner.next();
 
         player1 = new Player(playerName1, Symbol.X);
         player2 = new CPU("CPU", Symbol.O);
 
-        System.out.println("Имя первого игрока: "+player1.getName()+" и он обозначается "+player1.getSymbol());
-        System.out.println("Имя CPU: "+player2.getName()+" и он обозначается "+player2.getSymbol());
+        System.out.println("Имя первого игрока: " + player1.getName() + " и он обозначается " + player1.getSymbol());
+        System.out.println("Имя CPU: " + player2.getName() + " и он обозначается " + player2.getSymbol());
         startGameCPU();
     }
 
@@ -144,7 +143,7 @@ public class GameRealization extends Fields {
         int i =(int) (Math.random()*3);
         int j =(int) (Math.random()*3);
 
-        System.out.println("первое значение: "+i+" второе значение: "+j);
+        System.out.println("первое значение: " + i + " второе значение: "+j);
         if (square[i][j].equals(" ")) {
             Fields.addPosition(i, j, player2.getSymbol());
             addPositionToHistory(i, j, player2);
@@ -163,18 +162,16 @@ public class GameRealization extends Fields {
     }
 
     private boolean setPosition(Player player) {
-        boolean valueOfMethod = true;
-        this.makeMove = false;
+        valueOfMethod = true;
         while (!makeMove)
             valueOfMethod = position(player);
         return valueOfMethod;
     }
 
     private boolean position(Player player) {
-        boolean valueOfMethod = true;
+        valueOfMethod = true;
         boolean iCantMove = true;
         String backValue = "";
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Игрок " + player.getName() + " делает ход: ");
         String a = scanner.nextLine();
         String b = scanner.nextLine();
@@ -202,7 +199,7 @@ public class GameRealization extends Fields {
         } catch (NumberFormatException e) {
             System.out.println("NumberFormatException: введите числа от 0-2 или слово back для возврата хода");
             backValue = scanner.nextLine();
-            int lastElement = historyOfGame.size()-1;
+            int lastElement = historyOfGame.size() - 1;
             if (backValue.equals("back")) {
                 killLastElement(lastElement);
                 if (player2.getName().equals("CPU")) {
@@ -224,8 +221,8 @@ public class GameRealization extends Fields {
 
     private void killLastElement(int lastElement) {
         String value = historyOfGame.get(lastElement);
-        int value1 = Integer.parseInt(value)/10;
-        int value2 = Integer.parseInt(value)%10;
+        int value1 = Integer.parseInt(value) / 10;
+        int value2 = Integer.parseInt(value) % 10;
         Fields.killPosition(value1, value2);
     }
 
