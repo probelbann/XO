@@ -8,7 +8,7 @@ public class XO extends GameRealization{
 
         GameRealization game = new GameRealization();
         game.initGame();
-        game.showHistoryMovies(GameRealization.historyOfGame);
+        game.showHistoryMovies();
 
     }
     /*Выйгрышные комбинации

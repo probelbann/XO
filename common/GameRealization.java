@@ -331,6 +331,10 @@ public class GameRealization extends Fields {
             if (backValue.equals("back")) {
                 killLastElement(lastElement);
                 killLastElement(lastElement-1);
+                int size = playerHistory1.size();
+                playerHistory1.remove(size-1);
+                size = playerHistory2.size();
+                playerHistory2.remove(size-1);
                 countMoves--;
                 if (player2.getName().equals("CPU")) {
                     killLastElement(lastElement);
@@ -364,10 +368,10 @@ public class GameRealization extends Fields {
             }
     }
 
-    public void showHistoryMovies(ArrayList<String> history) {
-        int size = history.size();
+    public void showHistoryMovies() {
+        int size = historyOfGame.size();
         for (int j = 0; j < size; j++) {
-            System.out.print(history.get(j) + " ");
+            System.out.print(historyOfGame.get(j) + " ");
             }
             System.out.println();
     }
