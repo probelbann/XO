@@ -16,6 +16,7 @@ public class GameRealization extends Fields {
     public Scanner scanner = new Scanner(System.in);
     private static int countMoves = 1;
     private static boolean makeMove;
+    private static boolean cpuSetPosition;
     private Player player1;
     private Player player2;
 
@@ -133,23 +134,152 @@ public class GameRealization extends Fields {
     }
 
     private void CPUSetPosition() {
-        boolean iCantMove = true;
-        int i =(int) (Math.random()*3);
-        int j =(int) (Math.random()*3);
+        cpuSetPosition = false;
+        if (!cpuSetPosition) {
+            CPUCheckMid();
+        }
+    }
 
-        System.out.println("первое значение: " + i + " второе значение: "+j);
-        if (square[i][j].equals(" ")) {
-            Fields.addPosition(i, j, player2.getSymbol());
-            addPositionToHistory(i, j, player2);
-        } else {
-            while (iCantMove) {
-                System.out.println(player2.getName() + " делает неверный ход: iCantMove");
-                i =(int) (Math.random()*3);
-                j =(int) (Math.random()*3);
-                if (square[i][j].equals(" ")) {
-                    Fields.addPosition(i, j, player2.getSymbol());
-                    addPositionToHistory(i, j, player2);
-                    iCantMove = false;
+    private void CPUAddPosition(int i, int j) {
+        Fields.addPosition(i, j, player2.getSymbol());
+        addPositionToHistory(i, j, player2);
+    }
+
+    private void CPUCheckMid() {
+        if (square[1][1].equals(" ")) {
+            CPUAddPosition(1, 1);
+            cpuSetPosition = true;
+        }
+        if (!cpuSetPosition) {
+            CPUCheckYourWinMove();
+        }
+    }
+
+    private void CPUCheckCorners() {
+        if (square[0][0].equals(" ")) {
+            CPUAddPosition(0, 0);
+            cpuSetPosition = true;
+        } else if (square[0][2].equals(" ")) {
+            CPUAddPosition(0, 2);
+            cpuSetPosition = true;
+        } else if (square[2][2].equals(" ")) {
+            CPUAddPosition(2, 2);
+            cpuSetPosition = true;
+        } else if (square[2][0].equals(" ")) {
+            CPUAddPosition(2, 0);
+            cpuSetPosition = true;
+        }
+        if (!cpuSetPosition) {
+            CPUMoveToEmptyCell();
+        }
+    }
+
+    private void CPUCheckOneMoveToWin() {
+        String symbol = "X";
+        CPUCheckOneMove(symbol);
+        if (!cpuSetPosition) {
+            CPUCheckCorners();
+        }
+    }
+
+    private void CPUCheckYourWinMove() {
+        String symbol = "O";
+        CPUCheckOneMove(symbol);
+        if (!cpuSetPosition) {
+            CPUCheckOneMoveToWin();
+        }
+    }
+
+    private void CPUCheckOneMove(String symbol) {
+        //первая строка
+        if ((square[0][0].equals(symbol)) && (square[0][1].equals(symbol)) && (square[0][2].equals(" "))) {
+            CPUAddPosition(0, 2);
+            cpuSetPosition = true;
+        } else if ((square[0][1].equals(symbol)) && (square[0][2].equals(symbol)) && (square[0][0].equals(" "))) {
+            CPUAddPosition(0, 0);
+            cpuSetPosition = true;
+        } else if ((square[0][0].equals(symbol)) && (square[0][2].equals(symbol)) && (square[0][1].equals(" "))) {
+            CPUAddPosition(0, 1);
+            cpuSetPosition = true;
+        //вторая строка
+        } else if ((square[1][0].equals(symbol)) && (square[1][1].equals(symbol)) && (square[1][2].equals(" "))) {
+            CPUAddPosition(1, 2);
+            cpuSetPosition = true;
+        } else if ((square[1][1].equals(symbol)) && (square[1][2].equals(symbol)) && (square[1][0].equals(" "))) {
+            CPUAddPosition(1, 0);
+            cpuSetPosition = true;
+        } else if ((square[1][0].equals(symbol)) && (square[1][2].equals(symbol)) && (square[1][1].equals(" "))) {
+            CPUAddPosition(1, 1);
+            cpuSetPosition = true;
+        //третяя строка
+        } else if ((square[2][0].equals(symbol)) && (square[2][1].equals(symbol)) && (square[2][2].equals(" "))) {
+            CPUAddPosition(2, 2);
+            cpuSetPosition = true;
+        } else if ((square[2][1].equals(symbol)) && (square[2][2].equals(symbol)) && (square[2][0].equals(" "))) {
+            CPUAddPosition(2, 0);
+            cpuSetPosition = true;
+        } else if ((square[2][0].equals(symbol)) && (square[2][2].equals(symbol)) && (square[2][1].equals(" "))) {
+            CPUAddPosition(2, 1);
+            cpuSetPosition = true;
+        //первая колонка
+        } else if ((square[0][0].equals(symbol)) && (square[1][0].equals(symbol)) && (square[2][0].equals(" "))) {
+            CPUAddPosition(2, 0);
+            cpuSetPosition = true;
+        } else if ((square[1][0].equals(symbol)) && (square[2][0].equals(symbol)) && (square[0][0].equals(" "))) {
+            CPUAddPosition(0, 0);
+            cpuSetPosition = true;
+        } else if ((square[0][0].equals(symbol)) && (square[2][0].equals(symbol)) && (square[1][0].equals(" "))) {
+            CPUAddPosition(1, 0);
+            cpuSetPosition = true;
+        //вторая колонка
+        } else if ((square[0][1].equals(symbol)) && (square[1][1].equals(symbol)) && (square[2][1].equals(" "))) {
+            CPUAddPosition(2, 1);
+            cpuSetPosition = true;
+        } else if ((square[1][1].equals(symbol)) && (square[2][1].equals(symbol)) && (square[0][1].equals(" "))) {
+            CPUAddPosition(0, 1);
+            cpuSetPosition = true;
+        } else if ((square[0][1].equals(symbol)) && (square[2][1].equals(symbol)) && (square[1][1].equals(" "))) {
+            CPUAddPosition(1, 1);
+            cpuSetPosition = true;
+        //третья колонка
+        } else if ((square[0][2].equals(symbol)) && (square[1][2].equals(symbol)) && (square[2][2].equals(" "))) {
+            CPUAddPosition(2, 2);
+            cpuSetPosition = true;
+        } else if ((square[1][2].equals(symbol)) && (square[2][2].equals(symbol)) && (square[0][2].equals(" "))) {
+            CPUAddPosition(0, 2);
+            cpuSetPosition = true;
+        } else if ((square[0][2].equals(symbol)) && (square[2][2].equals(symbol)) && (square[1][2].equals(" "))) {
+            CPUAddPosition(1, 2);
+            cpuSetPosition = true;
+        //крест слева направо \
+        } else if ((square[0][0].equals(symbol)) && (square[1][1].equals(symbol)) && (square[2][2].equals(" "))) {
+            CPUAddPosition(2, 2);
+            cpuSetPosition = true;
+        } else if ((square[1][1].equals(symbol)) && (square[2][2].equals(symbol)) && (square[0][0].equals(" "))) {
+            CPUAddPosition(0, 0);
+            cpuSetPosition = true;
+        } else if ((square[0][0].equals(symbol)) && (square[2][2].equals(symbol)) && (square[1][1].equals(" "))) {
+            CPUAddPosition(1, 1);
+            cpuSetPosition = true;
+        //крест справа налево /
+        } else if ((square[0][2].equals(symbol)) && (square[1][1].equals(symbol)) && (square[2][0].equals(" "))) {
+            CPUAddPosition(2, 0);
+            cpuSetPosition = true;
+        } else if ((square[1][1].equals(symbol)) && (square[2][0].equals(symbol)) && (square[0][2].equals(" "))) {
+            CPUAddPosition(0, 2);
+            cpuSetPosition = true;
+        } else if ((square[0][2].equals(symbol)) && (square[2][0].equals(symbol)) && (square[1][1].equals(" "))) {
+            CPUAddPosition(1, 1);
+            cpuSetPosition = true;
+        }
+    }
+
+    private void CPUMoveToEmptyCell() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (square[i][j].equals(" ") && (!cpuSetPosition)){
+                    CPUAddPosition(i, j);
+                    cpuSetPosition = true;
                 }
             }
         }
@@ -166,7 +296,7 @@ public class GameRealization extends Fields {
     private boolean position(Player player) {
         boolean valueOfMethod = true;
         boolean iCantMove = true;
-        String backValue = "";
+        String backValue;
         System.out.println("Игрок " + player.getName() + " делает ход: ");
         Scanner scanner = new Scanner(System.in);
         String a = scanner.nextLine();
