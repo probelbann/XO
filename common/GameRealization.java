@@ -10,13 +10,13 @@ import java.util.Scanner;
 public class GameRealization extends Fields {
 
     public static final ArrayList<String> WIN_VALUE = new ArrayList<String>();
-    public static ArrayList<String> historyOfGame = new ArrayList<String>();
-    public static ArrayList<String> playerHistory1 = new ArrayList<String>();
-    public static ArrayList<String> playerHistory2 = new ArrayList<String>();
-    public Scanner scanner = new Scanner(System.in);
+    private static ArrayList<String> historyOfGame = new ArrayList<String>();
+    private static ArrayList<String> playerHistory1 = new ArrayList<String>();
+    private static ArrayList<String> playerHistory2 = new ArrayList<String>();
     private static int countMoves = 1;
     private static boolean makeMove;
     private static boolean cpuSetPosition;
+    public Scanner scanner = new Scanner(System.in);
     private Player player1;
     private Player player2;
 
