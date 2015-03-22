@@ -15,7 +15,7 @@ public class GameRealization extends Fields {
     public static ArrayList<String> playerHistory2 = new ArrayList<String>();
     public Scanner scanner = new Scanner(System.in);
     private static int countMoves = 1;
-    private boolean makeMove;
+    private static boolean makeMove;
     private Player player1;
     private Player player2;
 
@@ -64,11 +64,8 @@ public class GameRealization extends Fields {
     }
 
     private void startGamePVP() {
-        int countMoves = 1;
-        int i = 1;
-
-        for (; i < 10; i++) {
-            if (i%2 == 1) {
+        for (; countMoves < 10;) {
+            if (countMoves%2 == 1) {
                 System.out.println("Ход # " + countMoves);
                 if (setPosition(player1)) {
                     showSquare();
@@ -103,11 +100,8 @@ public class GameRealization extends Fields {
     }
 
     private void startGameCPU() {
-        //int countMoves = 1;
-        int i = 1;
-
-        for (; i < 10; i++) {
-            if (i%2 == 1) {
+        for (; countMoves < 10;) {
+            if (countMoves%2 == 1) {
                 System.out.println("Ход # " + countMoves);
                 if (setPosition(player1)) {
                     showSquare();
@@ -185,6 +179,7 @@ public class GameRealization extends Fields {
             if (square[i][j].equals(" ")) {
                 Fields.addPosition(i, j, player.getSymbol());
                 addPositionToHistory(i, j, player);
+                makeMove = true;
             } else {
                 while (iCantMove) {
                     System.out.println("Игрок " + player.getName() + " делает неверный ход повторите попытку: iCantMove");
@@ -194,6 +189,7 @@ public class GameRealization extends Fields {
                         Fields.addPosition(i, j, player.getSymbol());
                         addPositionToHistory(i, j, player);
                         iCantMove = false;
+                        makeMove = true;
                     }
                 }
             }
@@ -204,10 +200,12 @@ public class GameRealization extends Fields {
             int lastElement = historyOfGame.size() - 1;
             if (backValue.equals("back")) {
                 killLastElement(lastElement);
-                //countMoves--;
+                killLastElement(lastElement-1);
+                countMoves--;
                 if (player2.getName().equals("CPU")) {
                     killLastElement(lastElement);
                 }
+                makeMove = true;
                 historyOfGame.remove(lastElement);
                 valueOfMethod = false;
             }
@@ -216,9 +214,6 @@ public class GameRealization extends Fields {
             System.out.println("ArrayIndexOutOfBoundsException");
             position(player);
         }
-        if (backValue.equals("back")) {
-            this.makeMove = false;
-        } else { this.makeMove = true; }
         return valueOfMethod;
     }
 
