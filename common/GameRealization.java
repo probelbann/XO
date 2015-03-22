@@ -13,11 +13,11 @@ public class GameRealization extends Fields {
     public static ArrayList<String> historyOfGame = new ArrayList<String>();
     public static ArrayList<String> playerHistory1 = new ArrayList<String>();
     public static ArrayList<String> playerHistory2 = new ArrayList<String>();
+    public Scanner scanner = new Scanner(System.in);
+    private static int countMoves = 1;
     private boolean makeMove;
     private Player player1;
     private Player player2;
-    public Scanner scanner = new Scanner(System.in);
-    public boolean valueOfMethod = true;
 
     static {
         WIN_VALUE.add("00 01 02");
@@ -103,7 +103,7 @@ public class GameRealization extends Fields {
     }
 
     private void startGameCPU() {
-        int countMoves = 1;
+        //int countMoves = 1;
         int i = 1;
 
         for (; i < 10; i++) {
@@ -162,17 +162,19 @@ public class GameRealization extends Fields {
     }
 
     private boolean setPosition(Player player) {
-        valueOfMethod = true;
+        boolean valueOfMethod = true;
+        makeMove = false;
         while (!makeMove)
             valueOfMethod = position(player);
         return valueOfMethod;
     }
 
     private boolean position(Player player) {
-        valueOfMethod = true;
+        boolean valueOfMethod = true;
         boolean iCantMove = true;
         String backValue = "";
         System.out.println("Игрок " + player.getName() + " делает ход: ");
+        Scanner scanner = new Scanner(System.in);
         String a = scanner.nextLine();
         String b = scanner.nextLine();
 
@@ -202,6 +204,7 @@ public class GameRealization extends Fields {
             int lastElement = historyOfGame.size() - 1;
             if (backValue.equals("back")) {
                 killLastElement(lastElement);
+                //countMoves--;
                 if (player2.getName().equals("CPU")) {
                     killLastElement(lastElement);
                 }
@@ -280,3 +283,4 @@ public class GameRealization extends Fields {
     }
 
 }
+
